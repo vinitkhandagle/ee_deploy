@@ -1,0 +1,47 @@
+---
+# tasks file for dockerrole
+- name: Install Common Packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - htop
+    - ccze
+    - git
+    - python3-pip
+
+- name: Install Docker prerequisites
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: Add the Docker APT Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "{{ docker_apt_repository }}"
+
+- name: Install Docker on the Host
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: yes
+
+- name: Install docker compose
+  shell: curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+- name: Change docker compose permission
+  shell: chmod +x /usr/local/bin/docker-compose

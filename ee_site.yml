@@ -1,0 +1,12 @@
+---
+- name: EE docker deployment
+  hosts: private
+  gather_facts: yes
+  become: yes
+
+  tasks:
+  - name: Update Python Alternatives
+    raw: "sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.5 3"
+
+  roles:
+  - dockerrole

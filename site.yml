@@ -1,0 +1,32 @@
+---
+- name: Equal Experts Ansible test
+  hosts: controlhost
+  remote_user: ubuntu
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Show hostname
+      command: hostname -f
+
+    - name: Make SSH directory
+      command: mkdir -p /home/ubuntu/.ssh
+
+    - name: Copy ssh key to Ansible server
+      copy:
+        src: ee_deploy.pem
+        dest: /home/ubuntu/.ssh/ee_deploy.pem
+        owner: ubuntu
+        group: ubuntu
+        mode: 0600
+
+    - name: Copy roles directory
+      copy:
+        src: roles
+        dest: /home/ubuntu/
+
+    - name: Copy Site YAML file
+      copy:
+        src: ee_site.yml
+        dest: /home/ubuntu/
+
